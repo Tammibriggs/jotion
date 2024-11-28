@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/clerk-react";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 
@@ -9,14 +8,14 @@ import Image from "next/image";
 // import { useUser } from "@clerk/nextjs";
 // import { Button } from "@/components/ui/button";
 // import { PlusCircle } from "lucide-react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function DocumentPage() {
   const router = useRouter();
-  const { user } = useUser();
+  const user = useQuery(api.user.getAuthUser);
   const create = useMutation(api.documents.create);
 
   const onCreate = () => {
@@ -47,7 +46,7 @@ export default function DocumentPage() {
         className="hidden dark:block"
       />
       <h2 className="text-lg font-medium">
-        Welcome to {user?.firstName}&apos;s Jotion
+        Welcome to {user?.name}&apos;s Jotion
       </h2>
       <Button onClick={onCreate}>
         <PlusCircle className="h-4 w-4 mr-2" />

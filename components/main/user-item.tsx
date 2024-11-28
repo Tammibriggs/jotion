@@ -9,10 +9,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ChevronsLeftRight } from "lucide-react";
-import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Button } from "../ui/button";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 export const UserItem = () => {
-  const { user } = useUser();
+  const { signOut } = useAuthActions();
+  const user = useQuery(api.user.getAuthUser);
 
   return (
     <DropdownMenu>
@@ -23,10 +27,10 @@ export const UserItem = () => {
         >
           <div className="gap-x-2 flex items-center max-w-[150px]">
             <Avatar className="h-5 w-5">
-              <AvatarImage src={user?.imageUrl} />
+              <AvatarImage src={user?.image} />
             </Avatar>
             <span className="text-start font-medium line-clamp-1">
-              {user?.firstName}&apos;s Jotion
+              {user?.firstname}&apos;s Jotion
             </span>
           </div>
           <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground h-4 w-4" />
@@ -40,17 +44,17 @@ export const UserItem = () => {
       >
         <div className="flex flex-col space-y-4 p-2">
           <p className="text-xs font-medium leading-none text-muted-foreground">
-            {user?.emailAddresses[0].emailAddress}
+            {user?.email}
           </p>
           <div className="flex items-center gap-x-2">
             <div className="rounded-md bg-secondary p-1">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={user?.imageUrl} />
+                <AvatarImage src={user?.image} />
               </Avatar>
             </div>
             <div className="space-y-1">
               <p className="text-sm line-clamp-1">
-                {user?.fullName}&apos;s Jotion
+                {user?.firstname}&apos;s Jotion
               </p>
             </div>
           </div>
@@ -60,7 +64,9 @@ export const UserItem = () => {
           className="w-full cursor-pointer text-muted-foreground"
           asChild
         >
-          <SignOutButton>Logout</SignOutButton>
+          <button className="justify-center" onClick={signOut}>
+            Logout
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

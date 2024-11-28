@@ -14,10 +14,9 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { File } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
 
 export const SearchCommand = () => {
-  const { user } = useUser();
+  const user = useQuery(api.user.getAuthUser);
   const router = useRouter();
   const documents = useQuery(api.documents.getSearch);
   const [isMounted, setIsMounted] = useState(false);
@@ -51,7 +50,7 @@ export const SearchCommand = () => {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
-      <CommandInput placeholder={`Search ${user?.fullName}'s Jotion...`} />
+      <CommandInput placeholder={`Search ${user?.name}'s Jotion...`} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">

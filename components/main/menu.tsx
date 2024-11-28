@@ -2,7 +2,7 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { useRouter } from "next/navigation";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Trash } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
 
 interface MenuProps {
   documentId: Id<"documents">;
@@ -23,7 +22,8 @@ interface MenuProps {
 
 export const Menu = ({ documentId }: MenuProps) => {
   const router = useRouter();
-  const { user } = useUser();
+  const user = useQuery(api.user.getAuthUser);
+
   const archive = useMutation(api.documents.archive);
 
   const onArchive = () => {
@@ -54,7 +54,7 @@ export const Menu = ({ documentId }: MenuProps) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="text-xs text-muted-foreground p-2">
-          Last edited by: {user?.fullName}
+          Last edited by: {user?.name}
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -8,7 +8,8 @@ export const archive = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not found");
@@ -57,7 +58,8 @@ export const getSidebar = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const documents = await ctx.db
       .query("documents")
@@ -82,7 +84,8 @@ export const create = mutation({
 
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     return await ctx.db.insert("documents", {
       title: args.title,
@@ -100,7 +103,8 @@ export const getTrash = query({
 
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const documents = await ctx.db
       .query("documents")
@@ -119,7 +123,8 @@ export const restore = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not found");
@@ -160,7 +165,8 @@ export const remove = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not found");
@@ -177,7 +183,8 @@ export const getSearch = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not Authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const documents = await ctx.db
       .query("documents")
@@ -203,7 +210,8 @@ export const getById = query({
 
     if (!identity) throw new Error("Not authenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     if (document.userId !== userId) throw new Error("Unauthorized");
 
@@ -224,7 +232,8 @@ export const update = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const { id, ...rest } = args;
 
@@ -244,7 +253,8 @@ export const removeIcon = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not found");
@@ -262,7 +272,8 @@ export const removeCoverImage = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
 
-    const userId = identity.subject;
+    const subject = identity.subject;
+    const userId = subject.split("|")[0];
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not found");

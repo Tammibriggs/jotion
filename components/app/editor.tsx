@@ -2,13 +2,11 @@
 
 import { useTheme } from "next-themes";
 import { useEdgeStore } from "@/lib/edgestore";
-import { BlockNoteEditor, BlockNoteView } from "@blocknote/core";
-import { BlockNoteViewRaw, useCreateBlockNote } from "@blocknote/react";
-import { Theme } from "@blocknote/mantine";
+import { BlockNoteEditor } from "@blocknote/core";
+import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/mantine/style.css";
 import "@blocknote/core/fonts/inter.css";
-import { InlineContentSchema, StyleSchema, BlockConfig } from "@blocknote/core";
-import { ComponentProps } from "react";
+import { BlockNoteView } from "@blocknote/mantine";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -16,23 +14,19 @@ interface EditorProps {
   editable?: boolean;
 }
 
-declare module "@blocknote/core" {
-  const BlockNoteView: <
-    BSchema extends Record<string, BlockConfig>,
-    ISchema extends InlineContentSchema,
-    SSchema extends StyleSchema,
-  >(
-    props: Omit<
-      ComponentProps<typeof BlockNoteViewRaw<BSchema, ISchema, SSchema>>,
-      "theme"
-    > & {
-      editable?: boolean;
-      editor: BlockNoteEditor<BSchema, ISchema, SSchema>;
-      onChange?: () => void;
-      theme?: "light" | "dark" | Theme | { light: Theme; dark: Theme };
-    }
-  ) => any;
+interface EnhancedBlockNoteViewProps {
+  editable?: boolean;
+  editor: any;
+  onChange?: () => void;
+  theme?: any;
 }
+
+const EnhancedBlockNoteView: React.FC<EnhancedBlockNoteViewProps> = ({
+  theme,
+  ...props
+}) => {
+  return <BlockNoteView theme={theme} {...props} />;
+};
 
 const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { resolvedTheme } = useTheme();
@@ -50,7 +44,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
 
   return (
     <div>
-      <BlockNoteView
+      <EnhancedBlockNoteView
         editable={editable}
         editor={editor}
         onChange={() => {

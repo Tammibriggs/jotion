@@ -5,13 +5,14 @@ import { cn } from "@/lib/utils";
 import Logo from "./logo";
 import { ModeToggle } from "./mode.toggle";
 import { useConvexAuth } from "convex/react";
-import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "../ui/button";
 import { Spinner } from "./spinner";
 import Link from "next/link";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 function Navbar() {
   const scrolled = useScrollTop();
+  const { signIn } = useAuthActions();
   const { isAuthenticated, isLoading } = useConvexAuth();
   return (
     <div
@@ -25,14 +26,17 @@ function Navbar() {
         {isLoading && <Spinner />}
         {!isAuthenticated && !isLoading && (
           <>
-            <SignInButton mode="modal">
-              <Button variant="ghost" size="sm">
-                Log in
-              </Button>
-            </SignInButton>
-            <SignInButton mode="modal">
-              <Button size="sm">Get Jotion Free</Button>
-            </SignInButton>
+            {/* <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => void signIn("github")}
+            >
+              Log in
+            </Button> */}
+
+            <Button onClick={() => void signIn("github")} size="sm">
+              Log in with GitHub
+            </Button>
           </>
         )}
         {isAuthenticated && !isLoading && (
@@ -40,7 +44,6 @@ function Navbar() {
             <Button variant="ghost" size="sm" asChild>
               <Link href="/documents">Enter Jotion</Link>
             </Button>
-            <UserButton afterSwitchSessionUrl="/" />
           </>
         )}
         <ModeToggle />

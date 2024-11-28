@@ -5,13 +5,14 @@ import { Button } from "../ui/button";
 import { useConvexAuth, useQuery } from "convex/react";
 import Link from "next/link";
 import { Spinner } from "./spinner";
-import { SignUpButton } from "@clerk/clerk-react";
 import { api } from "@/convex/_generated/api";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 function Heading() {
+  const { signIn } = useAuthActions();
   const { isAuthenticated, isLoading } = useConvexAuth();
   const data = useQuery(api.documents.getIndexDocs);
-  console.log(data);
+
   return (
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
@@ -28,11 +29,9 @@ function Heading() {
         </div>
       )}
       {!isAuthenticated && !isLoading && (
-        <SignUpButton mode="modal">
-          <Button size="sm">
-            Get Jotion free <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
-        </SignUpButton>
+        <Button size="sm" onClick={() => void signIn("github")}>
+          Get Jotion free <ArrowRight className="h-4 w-4 ml-2" />
+        </Button>
       )}
       {isAuthenticated && !isLoading && (
         <Button asChild>
